@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Notif{
-  SnackBar snack(String? msg){
-    return SnackBar(content:
+  String opps = "Opps... Someting wrong...";
+  void snack(BuildContext context,String? msg){
+    var x =  SnackBar(content:
      Text("$msg"),
     );
+    ScaffoldMessenger.of(context).showSnackBar(x);
+
   }
 }
