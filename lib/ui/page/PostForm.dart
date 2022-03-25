@@ -66,7 +66,14 @@ class _PostFormState extends State<PostForm> {
                   FlatButton.icon(
                     onPressed: (){
                       if(_form.currentState!.validate()){
-                        _post = new PostBody(author: _user, created_at: new Utility().Datenow(), body: _formController["body"]!.value.text, title: _formController["title"]!.value.text);
+                        _post = new PostBody(
+                            author: _user,
+                            created_at: new Utility().Datenow(),
+                            body: _formController["body"]!.value.text,
+                            title: _formController["title"]!.value.text,
+                            id: "32",
+                            updated_at: new Utility().Datenow()
+                        );
                         print("Mantap");
                         print(_post.toString());
 

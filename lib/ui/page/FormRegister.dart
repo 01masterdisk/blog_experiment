@@ -1,15 +1,17 @@
 
-import 'dart:convert';
+
 
 import 'package:blog_experimental/constant/CustomStyle.dart';
 import 'package:blog_experimental/constant/Separator.dart';
+import 'package:blog_experimental/ui/page/FormLogin.dart';
+import 'package:blog_experimental/utils/SessionManager.dart';
 import 'package:blog_experimental/utils/Utility.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
-
-import '../../UI/Home.dart';
-import '../../api/RequestAPI.dart';
-import '../../constant/Notif.dart';
+import 'dart:convert';
+import 'package:blog_experimental/ui/page/Home.dart';
+import 'package:blog_experimental/api/RequestAPI.dart';
+import 'package:blog_experimental/constant/Notif.dart';
 
 class FormRegister extends StatefulWidget {
   const FormRegister({Key? key}) : super(key: key);
@@ -37,6 +39,7 @@ class _FormRegisterState extends State<FormRegister> {
     if(res.statusCode == 200){
       var x = jsonDecode(res.body);
       if(x["token"]!= null){
+        SessionManager().setToken(x);
         Notif().snack(context, "Welcome ${x["user"]["name"]}");
         Utility().ChangeActivity(context, Home());
       }else{
@@ -49,90 +52,114 @@ class _FormRegisterState extends State<FormRegister> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Register"),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-        child: Card(
-          margin: EdgeInsets.all(25),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Form(
-              key: _form,
+    return WillPopScope(
+      onWillPop: () async {
+        Utility().ChangeActivity(context, FormLogin());
+        return true;
+    },
+      child: Scaffold(
+        body: SafeArea(
+          child: Form(
+            key: _form,
+            child: Padding(
+              padding: const EdgeInsets.all(30),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Welcome to Registration Form',style: new CustomStyle().Title(),),
-                  Text('Please fill the form below and posting what ever you want.',style: new CustomStyle().Value(),),
+                  ListTile(
+                    title: Text('Welcome to Registration Form',style: new CustomStyle().Title(),) ,
+                    subtitle: Text('Please fill the form below and posting what ever you want.',style: new CustomStyle().Value(),),
+                  ),
+
                   new Separator().Large(),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0,4,8,4),
-                    child: TextFormField(
-                      autofocus: true,
-                      controller: _formController["username"],
-                      validator: (String? value){
-                        if(value!.isEmpty){
-                          return "Username must be filled !";
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Username',
-                        hintText: 'Username',
+                  Card(
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.abc
+                      ),
+                      title: TextFormField(
+                        autofocus: true,
+                        keyboardType: TextInputType.name,
+                        controller: _formController["username"],
+                        validator: (String? value){
+                          if(value!.isEmpty){
+                            return "Username must be filled !";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                          hintText: 'Username',
+                        ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0,4,8,4),
-                    child: TextFormField(
-                      controller: _formController["email"],
-                      validator: (String? value){
-                        if(value!.isEmpty){
-                          return "Email must be filled !";
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'email@mail.com',
+                  Card(
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.email
+                      ),
+                      title: TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        controller: _formController["email"],
+                        validator: (String? value){
+                          if(value!.isEmpty){
+                            return "Email must be filled !";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          hintText: 'email@mail.com',
+                        ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0,4,8,4),
-                    child: TextFormField(
-                      obscureText: true,
-                      controller: _formController["password"],
-                      validator: (String? value){
-                        if(value!.isEmpty){
-                          return "Password must be filled !";
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Password',
+                  Card(
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.password
+                      ),
+                      title: TextFormField(
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: true,
+                        controller: _formController["password"],
+                        validator: (String? value){
+                          if(value!.isEmpty){
+                            return "Password must be filled !";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          hintText: 'Password',
+                        ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0,4,8,4),
-                    child: TextFormField(
-                      obscureText: true,
-                      controller: _formController["confirm_password"],
-                      validator: (String? value){
-                        if(value!.isEmpty){
-                          return "Repeat Password !";
-                        }
-                        if(value != _formController["password"]!.value.text ){
-                          return "Password is different !";
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Confirm Password',
-                        hintText: 'Must be same with Password',
+                  Card(
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.password
+                      ),
+                      title: TextFormField(
+                        obscureText: true,
+                        keyboardType: TextInputType.visiblePassword,
+                        controller: _formController["confirm_password"],
+                        validator: (String? value){
+                          if(value!.isEmpty){
+                            return "Repeat Password !";
+                          }
+                          if(value != _formController["password"]!.value.text ){
+                            return "Password is different !";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Confirm Password',
+                          hintText: 'Must be same with Password',
+                        ),
                       ),
                     ),
                   ),
@@ -143,7 +170,7 @@ class _FormRegisterState extends State<FormRegister> {
                         doRegister();
                       }
                     },
-                    color: Colors.white,
+                    color: Colors.amber,
                     colorBrightness: Brightness.light,
                     label : Text("SIGN UP",style: new CustomStyle().Value(),),
                     icon: Icon(Icons.person_add),
