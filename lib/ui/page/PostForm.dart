@@ -31,12 +31,11 @@ class _PostFormState extends State<PostForm> {
 
   void doPosting() async {
     Notif().loading(context);
-    String? title ;
-    if(_formController["title"] == null){
-      title = "Untitled";
-    }else{
-      title = _formController["title"]?.value.text.toString();
+    String? title = _formController["title"]?.value.text.toString();
+    if(title?.length == 0) {
+      title = "Untiteled";
     }
+    print(title);
     var resp = await RequestAPI().posting(
         title,
         _formController["body"]?.value.text
@@ -57,6 +56,12 @@ class _PostFormState extends State<PostForm> {
         Notif().snack(context, Notif().opps);
         break;
     }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    setValue();
+    super.initState();
   }
 
   @override
@@ -81,13 +86,13 @@ class _PostFormState extends State<PostForm> {
                   Card(
                     child: ListTile(
                       leading: Icon(
-                        Icons.abc
+                        Icons.title
                       ),
-                      title: Text('Title :',),
                       subtitle: TextFormField(
                         controller: _formController["title"],
                         decoration: InputDecoration(
                           hintText: 'Title of your posting',
+                          labelText: 'Title',
                         ),
                       ),
                     ),
@@ -99,11 +104,14 @@ class _PostFormState extends State<PostForm> {
                       leading: Icon(
                         Icons.abc
                       ),
-                      title: Text('Content :',),
                       subtitle: TextFormField(
                         controller: _formController["body"],
                         maxLength: 500,
                         maxLines: 5,
+                        decoration: InputDecoration(
+                          hintText: 'What do you want to say ?',
+                          labelText: 'Content',
+                        ),
                         validator: (String? value){
                           if(value!.isEmpty){
                             return "What do you want to say ?";

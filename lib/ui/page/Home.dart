@@ -5,6 +5,7 @@ import 'package:blog_experimental/UI/list/Recycler.dart';
 import 'package:blog_experimental/api/RequestAPI.dart';
 import 'package:blog_experimental/constant/CustomStyle.dart';
 import 'package:blog_experimental/constant/Notif.dart';
+import 'package:blog_experimental/constant/Separator.dart';
 import 'package:blog_experimental/model/PostBody.dart';
 import 'package:blog_experimental/ui/page/FormLogin.dart';
 import 'package:blog_experimental/utils/SessionManager.dart';
@@ -69,13 +70,22 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('Home')),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: data.map((e) => Recycler(body: e)).toList(),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Column(
+                children: data.map((e) => Recycler(body: e)).toList(),
+              ),
+              Separator().Large(),
+              Separator().Large(),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
