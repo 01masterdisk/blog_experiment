@@ -29,31 +29,35 @@ class _HomeState extends State<Home> {
 
 
   void doGetBlog() async {
-    Notif().loading(context);
-    Navigator.pop(context);
      http.Response resp = await RequestAPI().list_blog();
       switch (resp.statusCode){
-        case 200 : var x = jsonDecode(resp.body);
-                  List<dynamic> tmp = x["blogs"];
-                  if(tmp.length>0) {
-                    for (int i = 0; i < tmp.length; i++) {
-                      data.add(PostBody(
-                          author: tmp[i]["created_by"].toString(),
-                          created_at: tmp[i]["created_at"].toString(),
-                          body: tmp[i]["content"].toString(),
-                          title: tmp[i]["title"].toString(),
-                          id: tmp[i]["id"].toString(),
-                          updated_at: tmp[i]["updated_at"].toString()
-                      ));
-                    }
-                  }
-                  break;
-        case 401 : Utility().ChangeActivity(context, FormLogin());
-                   Notif().snack(context, "Please Login First");
-                   break;
-        default : Notif().snack(context, Notif().opps);
-                  break;
+        case 200 :
+          var x = jsonDecode(resp.body);
+          List<dynamic> tmp = x["blogs"];
+          if(tmp.length>0) {
+            for (int i = 0; i < tmp.length; i++) {
+              data.add(PostBody(
+                  author: tmp[i]["created_by"].toString(),
+                  created_at: tmp[i]["created_at"].toString(),
+                  body: tmp[i]["content"].toString(),
+                  title: tmp[i]["title"].toString(),
+                  id: tmp[i]["id"].toString(),
+                  updated_at: tmp[i]["updated_at"].toString()
+              ));
+            }
+          }
+          break;
+        case 401 :
+          Notif().snack(context, "Please Login First");
+          Utility().ChangeActivity(context, FormLogin());
+          break;
+        default :
+          Notif().snack(context, Notif().opps);
+          break;
       }
+      setState(() {
+
+      });
   }
 
   @override
@@ -72,6 +76,15 @@ class _HomeState extends State<Home> {
       body: SingleChildScrollView(
         child: Column(
           children: data.map((e) => Recycler(body: e)).toList(),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Utility().ChangeActivity(context,PostForm());
+        },
+        backgroundColor: Colors.amber,
+        child: Icon(
+          Icons.post_add
         ),
       ),
       drawer: Drawer(

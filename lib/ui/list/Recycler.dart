@@ -2,6 +2,7 @@ import 'package:blog_experimental/constant/CustomStyle.dart';
 import 'package:blog_experimental/constant/Separator.dart';
 import 'package:blog_experimental/model/PostBody.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class Recycler extends StatelessWidget {
   final PostBody body;
@@ -10,39 +11,38 @@ class Recycler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.fromLTRB(15, 15, 15, 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(body.title,
-              style: new CustomStyle().TitleValue(),
+      margin: EdgeInsets.fromLTRB(30, 15, 30, 5),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+        child: ListTile(
+          title: Text(body.title,style: CustomStyle().TitleValue(),),
+          subtitle: Column(
+            children: [
+
+              ListTile(
+                  leading: Icon(
+                    Icons.person
+                  ),
+                  title: Text(body.author,style: CustomStyle().Default(),)
               ),
-            ),
+              ListTile(
+                  leading: Icon(
+                      Icons.date_range_outlined
+                  ),
+                  title: Text("created at : ${body.created_at}\nlast update : ${body.updated_at}",style: CustomStyle().Default(),)
+              ),
+              ListTile(
+                  leading: Icon(
+                      Icons.abc
+                  ),
+                  title: Text(body.body,style: CustomStyle().ValueColor(),)
+              ),
+            ],
           ),
-          new Separator().Large(),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0),
-            child: Text("created at : ${body.created_at}",
-              style: new CustomStyle().Default(),),
-          ),
-          new Separator().Large(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(body.body,
-              style: new CustomStyle().ValueColor(),
-            ),
-          ),
-          new Separator().Large(),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
-            child: Text("author : ${body.author}",
-              style: new CustomStyle().ValueBold(),),
-          ),
-        ],
-      ),
+        ),
+      )
     );
   }
 }
+
+//

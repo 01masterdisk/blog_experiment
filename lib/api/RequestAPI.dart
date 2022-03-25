@@ -29,7 +29,7 @@ class RequestAPI{
     String? rest = "";
     String? author = "";
     rest = await SessionManager().getToken();
-    rest = await SessionManager().getToken();
+    author = await SessionManager().getUsername();
     var req = {
       "created_by" : author,
       "title" : title,
@@ -38,8 +38,6 @@ class RequestAPI{
     var auth = {
       "Authorization" : "Bearer $rest"
     };
-    print(req);
-    print(auth);
     return await http.post(Uri.parse(server+"/api/blog"),headers: auth,body: req);
   }
 
