@@ -33,7 +33,7 @@ class _PostFormState extends State<PostForm> {
     Notif().loading(context);
     String? title ;
     if(_formController["title"] == null){
-      title = "<No Title>";
+      title = "Untitled";
     }else{
       title = _formController["title"]?.value.text.toString();
     }
