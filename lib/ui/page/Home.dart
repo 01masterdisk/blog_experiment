@@ -6,21 +6,27 @@ import 'package:blog_experimental/api/RequestAPI.dart';
 import 'package:blog_experimental/constant/CustomStyle.dart';
 import 'package:blog_experimental/constant/Notif.dart';
 import 'package:blog_experimental/model/PostBody.dart';
+import 'package:blog_experimental/ui/page/FormLogin.dart';
+import 'package:blog_experimental/utils/SessionManager.dart';
 import 'package:blog_experimental/utils/Utility.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 
-import '../../UI/page/FormLogin.dart';
 import 'PostForm.dart';
 
 class Home extends StatefulWidget {
+  String username;
+  Home({required this.username,});
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState(username: this.username);
 }
 
 class _HomeState extends State<Home> {
   var data = [];
+  String username="";
+
+  _HomeState({required this.username});
+
 
   void doGetBlog() async {
     Notif().loading(context);
@@ -59,7 +65,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('Home')),
@@ -74,9 +79,9 @@ class _HomeState extends State<Home> {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.grey
+                color: Colors.black54
               ),
-                child: Text('Blog Example')
+                child: Text('Welcome $username',style: CustomStyle().TitleValue(),)
             ),
             ListTile(
               leading: Icon(
@@ -93,7 +98,8 @@ class _HomeState extends State<Home> {
               ),
               title: Text('Logout'),
               onTap: (){
-
+                SessionManager().logout();
+                Utility().ChangeActivity(context, FormLogin());
               },
             ),
           ],

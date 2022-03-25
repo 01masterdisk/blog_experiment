@@ -1,6 +1,4 @@
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class SessionManager {
   final String TOKEN = "TkxmanAKLSlm12.?s@923";
@@ -21,6 +19,10 @@ class SessionManager {
   Future<String?> getUsername() async {
     var pref = await SharedPreferences.getInstance();
    return pref.getString(USERNAME);
+  }
+  void logout() async{
+    var pref = await SharedPreferences.getInstance();
+    await pref.clear();
   }
 }
 

@@ -41,7 +41,7 @@ class _FormRegisterState extends State<FormRegister> {
       if(x["token"]!= null){
         SessionManager().setToken(x);
         Notif().snack(context, "Welcome ${x["user"]["name"]}");
-        Utility().ChangeActivity(context, Home());
+        Utility().ChangeActivity(context, Home(username: x["user"]["name"],));
       }else{
         Notif().snack(context,x["error_message"]);
       }

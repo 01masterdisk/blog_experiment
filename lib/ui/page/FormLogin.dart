@@ -31,11 +31,11 @@ class _FormLoginState extends State<FormLogin> {
 
   void autoLogin() async{
     var x = await SessionManager().getUsername();
-    print(x);
     if(x != null){
       Notif().snack(context,"Welcome, $x");
-      Utility().ChangeActivity(context, Home());
+      Utility().ChangeActivity(context, Home(username: x,));
     }
+
   }
   void doLogin() async{
     Notif().loading(context);
@@ -46,7 +46,7 @@ class _FormLoginState extends State<FormLogin> {
       if(x["token"] != null){
         SessionManager().setToken(x);
         Notif().snack(context,"Welcome, ${x["user"]["name"]}");
-        Utility().ChangeActivity(context, Home());
+        Utility().ChangeActivity(context, Home(username: x["user"]["name"],));
       }else{
        Notif().snack(context,x["error_message"]);
       }
@@ -56,8 +56,14 @@ class _FormLoginState extends State<FormLogin> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
     autoLogin();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Form(
