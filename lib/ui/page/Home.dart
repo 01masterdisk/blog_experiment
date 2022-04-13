@@ -1,12 +1,10 @@
 
 import 'dart:convert';
-
-import 'package:blog_experimental/UI/list/Recycler.dart';
 import 'package:blog_experimental/api/RequestAPI.dart';
 import 'package:blog_experimental/constant/CustomStyle.dart';
 import 'package:blog_experimental/constant/Notif.dart';
-import 'package:blog_experimental/constant/Separator.dart';
 import 'package:blog_experimental/model/PostBody.dart';
+import 'package:blog_experimental/ui/list/Recycler.dart';
 import 'package:blog_experimental/ui/page/FormLogin.dart';
 import 'package:blog_experimental/utils/SessionManager.dart';
 import 'package:blog_experimental/utils/Utility.dart';
@@ -36,6 +34,7 @@ class _HomeState extends State<Home> {
           var x = jsonDecode(resp.body);
           List<dynamic> tmp = x["blogs"];
           if(tmp.length>0) {
+            setState(() {
             for (int i = 0; i < tmp.length; i++) {
               data.add(PostBody(
                   author: tmp[i]["created_by"].toString(),
@@ -46,6 +45,7 @@ class _HomeState extends State<Home> {
                   updated_at: tmp[i]["updated_at"].toString()
               ));
             }
+            });
           }
           break;
         case 401 :
@@ -56,9 +56,8 @@ class _HomeState extends State<Home> {
           Notif().snack(context, Notif().opps);
           break;
       }
-      setState(() {
 
-      });
+
   }
 
   @override
@@ -70,22 +69,15 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
+    List<Widget> x = data.map((e) => Recycler().card(e as PostBody)).toList();
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('Home')),
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            children: [
-              Column(
-                children: data.map((e) => Recycler(body: e)).toList(),
-              ),
-              Separator().Large(),
-              Separator().Large(),
-            ],
-          ),
+      body: SafeArea(
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: x,
         ),
       ),
       floatingActionButton: FloatingActionButton(

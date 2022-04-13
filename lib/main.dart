@@ -1,5 +1,6 @@
+
+import 'package:blog_experimental/ui/page/SplashScreen.dart';
 import 'package:flutter/material.dart';
-import 'UI/page/FormLogin.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -7,10 +8,7 @@ void main() {
       brightness: Brightness.dark,
 
     ),
-    home: FormLogin(),
-    navigatorKey: GlobalKey(
-      debugLabel: 'Login'
-    ),
+    home: SplashScreen(),
   ));
 }
 
